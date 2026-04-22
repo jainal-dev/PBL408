@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#dbeafe,#eff6ff);
+  display:flex;
+  justify-content:center;
+  padding:16px;
+}
+
+body::before, body::after{
+  content:'';
+  position:absolute;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  filter:blur(120px);
+}
+body::before{background:#60a5fa;top:-80px;left:-80px;}
+body::after{background:#3b82f6;bottom:-80px;right:-80px;}
+
+.container{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:420px;
+}
+
+/* header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.profile{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:linear-gradient(#3b82f6,#2563eb);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+}
+
+/* toggle */
+.toggle{
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.toggle button{
+  flex:1;
+  padding:8px;
+  border-radius:20px;
+  border:none;
+  background:rgba(255,255,255,0.7);
+  cursor:pointer;
+}
+
+.toggle .active{
+  background:#2563eb;
+  color:white;
+}
+
+/* AREA */
+.area{
+  display:flex;
+  gap:6px;
+  margin-bottom:12px;
+}
+
+.area button{
+  flex:1;
+  padding:6px;
+  border-radius:20px;
+  border:none;
+  background:rgba(255,255,255,0.7);
+}
+
+.area button.active-area{
+  background:#2563eb;
+  color:white;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.card{
+  padding:12px;
+  border-radius:14px;
+  text-align:center;
+  background:rgba(255,255,255,0.75);
+}
+
+.available{border:2px solid #22c55e;}
+.filled{border:2px solid #ef4444;}
+.problem{border:2px solid #f59e0b;}
+
+small{
+  display:block;
+  margin-top:4px;
+  font-size:11px;
+}
+
+/* LAPORAN */
+.report-card{
+  background:rgba(255,255,255,0.9);
+  padding:14px;
+  border-radius:14px;
+  margin-bottom:10px;
+}
+
+.status{
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:8px;
+}
+
+.menunggu{background:#facc15;}
+.valid{background:#22c55e;color:white;}
+.tolak{background:#ef4444;color:white;}
+
+.navbar{
+  position:fixed;
+  bottom:10px;
+  width:100%;
+  max-width:420px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(255,255,255,0.8);
+  border-radius:20px;
+  display:flex;
+  justify-content:space-around;
+  padding:12px;
+}
+
+.navbar a{
+  text-decoration:none;
+  color:#0f172a;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h2>Parkir Cerdas</h2>
+    <a href="profil.html" class="profile">BU</a>
+  </div>
+
+  <div class="toggle">
+    <button class="active" onclick="setMode('cv', this)">CV</button>
+    <button onclick="setMode('laporan', this)">Laporan</button>
+  </div>
+
+  <div class="area">
+    <button class="active-area" onclick="setArea(this)">TA</button>
+    <button onclick="setArea(this)">GU</button>
+    <button onclick="setArea(this)">Techno</button>
+    <button onclick="setArea(this)">RTM</button>
+  </div>
+
+  <div id="content"></div>
+
+</div>
+
+<div class="navbar">
+  <a href="dashboard.html">Beranda</a>
+  <a href="validasi.html">Validasi</a>
+  <a href="laporan.html">Laporan</a>
+</div>
+
+<script>
+
+let mode = "cv";
+
+/* CV */
+const dataCV = [
+  {slot:"A1", kondisi:"Kosong"},
+  {slot:"A2", kondisi:"Terisi"},
+  {slot:"A3", kondisi:"Rusak"},
+  {slot:"A4", kondisi:"Kosong"},
+  {slot:"A5", kondisi:"Terisi"},
+  {slot:"A6", kondisi:"Kosong"}
+];
+
+/* 🔥 DUMMY BESAR LAPORAN USER */
+function initDummy(){
+  if(!localStorage.getItem("laporan")){
+    let dummy = [
+      {area:"TA", slot:"A1", kondisi:"Kosong", user:"Andi", desc:"Terlihat kosong sejak pagi", waktu:"14-04-2026 08:10"},
+      {area:"TA", slot:"A2", kondisi:"Terisi", user:"Budi", desc:"Mobil parkir rapat", waktu:"14-04-2026 08:20"},
+      {area:"TA", slot:"A3", kondisi:"Rusak", user:"Sinta", desc:"Sensor error tidak terbaca", waktu:"14-04-2026 08:45"},
+
+      {area:"GU", slot:"B1", kondisi:"Kosong", user:"Rafi", desc:"Area bersih dan kosong", waktu:"14-04-2026 09:00"},
+      {area:"GU", slot:"B2", kondisi:"Terisi", user:"Dina", desc:"Motor full slot", waktu:"14-04-2026 09:10"},
+      {area:"GU", slot:"B3", kondisi:"Terisi", user:"Tono", desc:"Padat kendaraan", waktu:"14-04-2026 09:25"},
+
+      {area:"Techno", slot:"C1", kondisi:"Rusak", user:"Ayu", desc:"Sensor mati total", waktu:"14-04-2026 10:00"},
+      {area:"Techno", slot:"C2", kondisi:"Kosong", user:"Fajar", desc:"Tidak ada kendaraan", waktu:"14-04-2026 10:15"},
+      {area:"Techno", slot:"C3", kondisi:"Terisi", user:"Nina", desc:"Parkir penuh", waktu:"14-04-2026 10:30"},
+
+      {area:"RTM", slot:"D1", kondisi:"Terisi", user:"Ilham", desc:"Weekend sangat padat", waktu:"14-04-2026 11:00"},
+      {area:"RTM", slot:"D2", kondisi:"Kosong", user:"Rina", desc:"Masih tersedia banyak slot", waktu:"14-04-2026 11:20"},
+      {area:"RTM", slot:"D3", kondisi:"Rusak", user:"Agus", desc:"Barrier tidak berfungsi", waktu:"14-04-2026 11:40"}
+    ];
+
+    localStorage.setItem("laporan", JSON.stringify(dummy));
+  }
+}
+
+/* RENDER */
+function render(){
+  let content = document.getElementById("content");
+  content.innerHTML = "";
+
+  if(mode === "cv"){
+    content.innerHTML = `<div class="grid"></div>`;
+    let grid = content.querySelector(".grid");
+
+    dataCV.forEach(d=>{
+      let cls =
+        d.kondisi === "Kosong" ? "available" :
+        d.kondisi === "Terisi" ? "filled" :
+        "problem";
+
+      grid.innerHTML += `
+        <div class="card ${cls}">
+          <b>${d.slot}</b>
+          <small>${d.kondisi}</small>
+        </div>
+      `;
+    });
+
+  } else {
+    let data = JSON.parse(localStorage.getItem("laporan")) || [];
+
+    data.forEach(d=>{
+
+      let warna =
+        d.kondisi === "Kosong" ? "#22c55e" :
+        d.kondisi === "Terisi" ? "#ef4444" :
+        "#f59e0b";
+
+      content.innerHTML += `
+        <div class="report-card">
+
+          <div style="display:flex;justify-content:space-between;">
+            <div>
+              <b>${d.area} - ${d.slot}</b>
+              <div style="font-size:11px;color:#64748b;">
+                oleh ${d.user}
+              </div>
+            </div>
+
+            <span style="
+              font-size:11px;
+              padding:4px 8px;
+              border-radius:8px;
+              background:${warna};
+              color:white;
+            ">
+              ${d.kondisi}
+            </span>
+          </div>
+
+          <div style="margin-top:8px;font-size:13px;">
+            ${d.desc}
+          </div>
+
+          <div style="margin-top:6px;font-size:11px;color:#94a3b8;">
+            🕒 ${d.waktu}
+          </div>
+
+        </div>
+      `;
+    });
+  }
+}
+
+function setMode(m, btn){
+  mode = m;
+  document.querySelectorAll(".toggle button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
+
+function setArea(btn){
+  document.querySelectorAll(".area button").forEach(b=>b.classList.remove("active-area"));
+  btn.classList.add("active-area");
+}
+
+initDummy();
+render();
+
+</script>
+
+</body>
+</html>
