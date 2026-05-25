@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#dbeafe,#eff6ff);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+/* glow */
+body::before, body::after{
+  content:'';
+  position:absolute;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  filter:blur(120px);
+}
+body::before{background:#60a5fa;top:-80px;left:-80px;}
+body::after{background:#3b82f6;bottom:-80px;right:-80px;}
+
+.card{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:400px;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(14px);
+  padding:24px;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(59,130,246,0.15);
+}
+
+/* avatar */
+.avatar{
+  width:85px;
+  height:85px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#3b82f6,#2563eb);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  margin:auto;
+  margin-bottom:14px;
+}
+
+/* text */
+.name{
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+  color:#0f172a;
+}
+
+.email{
+  text-align:center;
+  font-size:13px;
+  color:#64748b;
+  margin-bottom:18px;
+}
+
+/* detail */
+.detail{
+  background:white;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:12px;
+}
+
+.label{
+  font-size:11px;
+  color:#94a3b8;
+}
+
+.value{
+  font-size:14px;
+  font-weight:500;
+}
+
+/* button */
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(90deg,#3b82f6,#2563eb);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:12px;
+}
+
+/* logout */
+.logout{
+  background:linear-gradient(90deg,#ef4444,#dc2626);
+}
+
+/* edit */
+.edit{
+  display:none;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+}
+
+/* back */
+.back{
+  display:block;
+  text-align:center;
+  margin-top:12px;
+  text-decoration:none;
+  color:#2563eb;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <div class="avatar" id="avatar">U</div>
+
+  <!-- VIEW MODE -->
+  <div id="view">
+    <div class="name" id="name"></div>
+    <div class="email" id="email"></div>
+
+    <div class="detail">
+      <div class="label">Username</div>
+      <div class="value" id="usernameText"></div>
+    </div>
+
+    <div class="detail">
+      <div class="label">Email</div>
+      <div class="value" id="emailText"></div>
+    </div>
+
+    <button onclick="showEdit()">Edit Profil</button>
+    <button class="logout" onclick="logout()">Keluar</button>
+  </div>
+
+  <!-- EDIT MODE -->
+  <div id="edit" class="edit">
+
+    <div class="label">Username</div>
+    <input id="usernameInput">
+
+    <div class="label">Email</div>
+    <input id="emailInput">
+
+    <button onclick="simpan()">Simpan Perubahan</button>
+  </div>
+
+  <a href="dashboard.html" class="back">Kembali</a>
+
+</div>
+
+<script>
+
+/* INIT USER */
+function initUser(){
+  if(!localStorage.getItem("user")){
+    localStorage.setItem("user", JSON.stringify({
+      username:"Budi",
+      email:"budi@gmail.com"
+    }));
+  }
+
+  let user = JSON.parse(localStorage.getItem("user"));
+
+  document.getElementById("name").innerText = user.username;
+  document.getElementById("email").innerText = user.email;
+  document.getElementById("usernameText").innerText = user.username;
+  document.getElementById("emailText").innerText = user.email;
+
+  document.getElementById("avatar").innerText = user.username.charAt(0).toUpperCase();
+
+  document.getElementById("usernameInput").value = user.username;
+  document.getElementById("emailInput").value = user.email;
+}
+
+/* EDIT */
+function showEdit(){
+  document.getElementById("view").style.display="none";
+  document.getElementById("edit").style.display="block";
+}
+
+/* SIMPAN */
+function simpan(){
+  let username = document.getElementById("usernameInput").value;
+  let email = document.getElementById("emailInput").value;
+
+  localStorage.setItem("user", JSON.stringify({username,email}));
+
+  initUser();
+
+  document.getElementById("edit").style.display="none";
+  document.getElementById("view").style.display="block";
+}
+
+/* LOGOUT */
+function logout(){
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
+}
+
+initUser();
+
+</script>
+
+</body>
+</html>
