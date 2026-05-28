@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/user.css">
+</head>
+
+<body>
+
+<div class="card">
+
+  <div class="avatar" id="avatar">U</div>
+
+  <!-- VIEW MODE -->
+  <div id="view">
+    <div class="name" id="name"></div>
+    <div class="email" id="email"></div>
+
+    <div class="detail">
+      <div class="label">Username</div>
+      <div class="value" id="usernameText"></div>
+    </div>
+
+    <div class="detail">
+      <div class="label">Email</div>
+      <div class="value" id="emailText"></div>
+    </div>
+
+    <button onclick="showEdit()">Edit Profil</button>
+    <button class="logout" onclick="logout()">Keluar</button>
+  </div>
+
+  <!-- EDIT MODE -->
+  <div id="edit" class="edit">
+
+    <div class="label">Username</div>
+    <input id="usernameInput">
+
+    <div class="label">Email</div>
+    <input id="emailInput">
+
+    <button onclick="simpan()">Simpan Perubahan</button>
+  </div>
+
+  <a href="#user/dashboard" class="back">Kembali</a>
+
+</div>
+
+<script>
+
+function getActiveUser() {
+  const authRole = localStorage.getItem('authRole');
+  if (authRole !== 'user') {
+    window.location.hash = 'user/login';
+    return null;
+  }
+
+  const authUser = localStorage.getItem('authUser');
+  const users = JSON.parse(localStorage.getItem('users') || '[]');
+  let user = users.find(u => u.username === authUser);
+  if (!user) {
+    const legacy = JSON.parse(localStorage.getItem('user') || 'null');
+    if (legacy && legacy.username === authUser) {
+      user = legacy;
+    }
+  }
+
+  if (!user) {
+    window.location.hash = 'user/login';
+    return null;
+  }
+
+  return user;
+}
+
+function initUser() {
+  const user = getActiveUser();
+  if (!user) return;
+
+  document.getElementById('name').innerText = user.username;
+  document.getElementById('email').innerText = user.email;
+  document.getElementById('usernameText').innerText = user.username;
+  document.getElementById('emailText').innerText = user.email;
+  document.getElementById('avatar').innerText = user.username.charAt(0).toUpperCase();
+  document.getElementById('usernameInput').value = user.username;
+  document.getElementById('emailInput').value = user.email;
+}
+
+function showEdit() {
+  document.getElementById('view').style.display = 'none';
+  document.getElementById('edit').style.display = 'block';
+}
+
+function simpan() {
+  const username = document.getElementById('usernameInput').value.trim();
+  const email = document.getElementById('emailInput').value.trim();
+  const authUser = localStorage.getItem('authUser');
+
+  if (!username || !email) {
+    alert('Username dan email tidak boleh kosong.');
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem('users') || '[]');
+  const index = users.findIndex(u => u.username === authUser);
+  if (index !== -1) {
+    users[index].username = username;
+    users[index].email = email;
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('authUser', username);
+    localStorage.setItem('authEmail', email);
+  }
+
+  localStorage.setItem('user', JSON.stringify({ username, email }));
+
+  initUser();
+  document.getElementById('edit').style.display = 'none';
+  document.getElementById('view').style.display = 'block';
+}
+
+function logout() {
+  localStorage.removeItem('authRole');
+  localStorage.removeItem('authEmail');
+  localStorage.removeItem('authUser');
+  window.location.hash = 'user/login';
+}
+
+initUser();
+
+</script>
+
+</body>
+</html>

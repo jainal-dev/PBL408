@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../public/css/auth.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <div class="header">
+    <h1>Smart <span>Parking</span></h1>
+    <p>Login untuk melanjutkan 🚗</p>
+  </div>
+
+  <div class="form-container">
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" placeholder="Masukkan email">
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" placeholder="Masukkan password">
+    </div>
+
+    <button onclick="login()">Masuk</button>
+
+    <div class="footer">
+      <a href="daftar.html">Belum punya akun? Daftar</a>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function login() {
+  document.querySelector(".wrapper").style.transform = "scale(0.95)";
+  document.querySelector(".wrapper").style.opacity = "0.5";
+
+  setTimeout(() => {
+    window.location.href = "dashboard.html";
+  }, 300);
+}
+</script>
+
+</body>
+</html>

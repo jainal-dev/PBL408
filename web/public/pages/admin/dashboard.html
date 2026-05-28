@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="admin-shell">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <h2>Admin Menu</h2>
+      <a href="#admin/dashboard" class="nav-link active">Dashboard</a>
+      <a href="#admin/dashboard" class="nav-link">Laporan</a>
+      <a href="#admin/dashboard" class="nav-link">Pengaturan</a>
+      <button class="logout-button" onclick="logoutAdmin()">Keluar</button>
+    </aside>
+
+    <section class="admin-main">
+      <div class="admin-card">
+        <div class="admin-header">
+          <div>
+            <h1>Admin Dashboard</h1>
+            <p>Ringkasan pengelolaan parkir dan laporan.</p>
+          </div>
+          <button class="action-button" onclick="refreshData()">Segarkan</button>
+        </div>
+
+        <div class="overview-grid">
+          <div class="metric-card">
+            <h3>Total Laporan</h3>
+            <p>128</p>
+          </div>
+          <div class="metric-card">
+            <h3>Slot Rusak</h3>
+            <p>14</p>
+          </div>
+          <div class="metric-card">
+            <h3>Validasi Pending</h3>
+            <p>8</p>
+          </div>
+          <div class="metric-card">
+            <h3>Pengguna Aktif</h3>
+            <p>321</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-card table-card">
+        <h2>Aktivitas Terbaru</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Waktu</th>
+              <th>Area / Slot</th>
+              <th>Status</th>
+              <th>User</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>11:20</td>
+              <td>TA / A2</td>
+              <td>Terisi</td>
+              <td>Budi</td>
+            </tr>
+            <tr>
+              <td>10:50</td>
+              <td>GU / B3</td>
+              <td>Rusak</td>
+              <td>Rina</td>
+            </tr>
+            <tr>
+              <td>10:15</td>
+              <td>Techno / C1</td>
+              <td>Kosong</td>
+              <td>Anisa</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+<script>
+function logoutAdmin() {
+  localStorage.removeItem('authRole');
+  localStorage.removeItem('authEmail');
+  window.location.hash = 'admin/login';
+}
+
+function refreshData() {
+  alert('Data admin disegarkan.');
+}
+</script>
+</body>
+</html>

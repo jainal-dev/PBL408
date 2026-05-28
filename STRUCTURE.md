@@ -22,7 +22,8 @@ PBL409/
 │   │   └── env.js                    # Environment config
 │   ├── utils/                        # Utility functions
 │   ├── server.js                     # Express server entry point
-│   └── package.json                  # Backend dependencies
+│   ├── package.json                  # Backend dependencies
+│   └── .env.example                  # Backend environment template
 │
 ├── web/                              # Web Application (Vanilla JS + Vite)
 │   ├── public/
@@ -33,30 +34,30 @@ PBL409/
 │   │       └── images/               # Image assets
 │   ├── src/
 │   │   ├── main.js                   # App initialization
-│   │   ├── App.js                    # Main component
+│   │   ├── App.js                    # Main component with page routing
 │   │   ├── components/               # Reusable components
-│   │   └── pages/                    # Page components
-│   └── package.json                  # Web dependencies
+│   │   └── pages/                    # UI Pages (moved from spark/)
+│   │       ├── dashboard.html        # Dashboard page
+│   │       ├── validasi.html         # Validation page
+│   │       ├── detail_validasi.html  # Detail validation page
+│   │       ├── laporan.html          # Reports page
+│   │       ├── profil.html           # Profile page
+│   │       ├── login.html            # Login page
+│   │       └── daftar.html           # Registration page
+│   ├── package.json                  # Web dependencies
+│   └── .env.example                  # Web environment template
 │
 ├── iot/                              # IoT Devices & Sensors
 │   ├── firmware/
 │   │   └── main.ino                  # Arduino/ESP32 main sketch
 │   ├── drivers/                      # Device drivers
 │   ├── sensors/                      # Sensor configurations
-│   └── README.md
-│
-├── spark/                            # Original UI Components
-│   ├── dashboard.html
-│   ├── validasi.html
-│   ├── detail_validasi.html
-│   ├── laporan.html
-│   ├── profil.html
-│   ├── login.html
-│   └── daftar.html
+│   ├── README.md                     # IoT setup documentation
+│   └── .env.example                  # IoT environment template
 │
 ├── README.md                         # Project documentation
 ├── STRUCTURE.md                      # This file
-├── .env.example                      # Environment template
+├── .env.example                      # Root environment template
 └── .gitignore                        # Git ignore rules
 ```
 
@@ -65,6 +66,7 @@ PBL409/
 ### Backend
 - `backend/server.js` - Express server with sample routes
 - `backend/package.json` - NPM dependencies
+- `backend/.env.example` - Backend environment configuration
 - `backend/api/controllers/README.md` - Controller documentation
 - `backend/api/routes/README.md` - Route documentation
 - `backend/api/models/README.md` - Database model schemas
@@ -73,16 +75,19 @@ PBL409/
 ### Web
 - `web/public/index.html` - HTML entry point
 - `web/src/main.js` - App initialization
-- `web/src/App.js` - Main React-like component
+- `web/src/App.js` - Main component with dynamic page loading
 - `web/public/css/style.css` - Styled components
+- `web/src/pages/*.html` - All UI pages (moved from spark/)
 - `web/package.json` - Frontend dependencies
+- `web/.env.example` - Web environment configuration
 
 ### IoT
 - `iot/firmware/main.ino` - Arduino sketch for sensor data
 - `iot/README.md` - IoT setup documentation
+- `iot/.env.example` - IoT environment configuration
 
 ### Configuration
-- `.env.example` - Environment variables template
+- `.env.example` - Root environment variables template
 - `README.md` - Getting started guide
 - `.gitignore` - Git ignore configuration
 
@@ -92,7 +97,7 @@ PBL409/
 ```bash
 cd backend
 npm install
-cp ../.env.example ../.env
+cp .env.example .env
 npm run dev      # Development mode
 npm start        # Production mode
 ```
@@ -101,6 +106,7 @@ npm start        # Production mode
 ```bash
 cd web
 npm install
+cp .env.example .env
 npm run dev      # Development server
 npm run build    # Build for production
 ```
@@ -112,6 +118,15 @@ npm run build    # Build for production
 4. Select correct board and port
 5. Upload firmware
 6. Monitor with Serial (9600 baud)
+
+## Web Application Features
+
+The web application now includes:
+- **Dynamic Page Loading**: All pages from spark/ are loaded dynamically
+- **Navigation**: Complete navigation between all pages
+- **Routing**: Hash-based routing for page navigation
+- **Responsive Design**: Mobile-friendly interface
+- **Error Handling**: Graceful error handling for missing pages
 
 ## API Endpoints
 

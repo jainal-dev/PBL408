@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/user.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <div class="header">
+    <h1>Smart <span>Parking</span></h1>
+    <p>Buat akun baru 🚗</p>
+  </div>
+
+  <div class="form-container">
+
+    <div class="input-group">
+      <label>Nama</label>
+      <input type="text" placeholder="Masukkan nama">
+    </div>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" placeholder="Masukkan email">
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" placeholder="Buat password">
+    </div>
+
+    <div class="input-group">
+      <label>Konfirmasi Password</label>
+      <input type="password" placeholder="Ulangi password">
+    </div>
+
+    <button onclick="register()">Daftar</button>
+
+    <div class="footer">
+      <a href="#user/login">Sudah punya akun? Login</a>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function register() {
+  const username = document.querySelector('input[type="text"]').value.trim();
+  const email = document.querySelector('input[type="email"]').value.trim();
+  const password = document.querySelectorAll('input[type="password"]')[0].value.trim();
+  const confirm = document.querySelectorAll('input[type="password"]')[1].value.trim();
+
+  if (!username || !email || !password || !confirm) {
+    alert('Semua field harus diisi.');
+    return;
+  }
+
+  if (password !== confirm) {
+    alert('Password dan konfirmasi harus sama.');
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem('users') || '[]');
+  if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+    alert('Username sudah terdaftar.');
+    return;
+  }
+
+  const newUser = { username, email, password };
+  users.push(newUser);
+  localStorage.setItem('users', JSON.stringify(users));
+  localStorage.setItem('authRole', 'user');
+  localStorage.setItem('authUser', username);
+  localStorage.setItem('authEmail', email);
+
+  document.querySelector('.wrapper').style.transform = 'scale(0.95)';
+  document.querySelector('.wrapper').style.opacity = '0.5';
+
+  setTimeout(() => {
+    window.location.hash = 'user/dashboard';
+  }, 300);
+}
+</script>
+
+</body>
+</html>

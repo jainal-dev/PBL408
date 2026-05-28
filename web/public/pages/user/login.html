@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/user.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <div class="header">
+    <h1>Smart <span>Parking</span></h1>
+    <p>Login untuk melanjutkan 🚗</p>
+  </div>
+
+  <div class="form-container">
+
+    <div class="input-group">
+      <label>Username</label>
+      <input type="text" name="username" placeholder="Masukkan username">
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Masukkan password">
+    </div>
+
+    <button onclick="login()">Masuk</button>
+
+    <div class="footer">
+      <a href="#user/register">Belum punya akun? Daftar</a>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function login() {
+  const username = document.querySelector('input[name="username"]').value.trim();
+  const password = document.querySelector('input[name="password"]').value.trim();
+
+  if (!username || !password) {
+    alert('Username dan password harus diisi.');
+    return;
+  }
+
+  if (username.toLowerCase() === 'admin' && password === '1234') {
+    localStorage.setItem('authRole', 'admin');
+    localStorage.setItem('authUser', 'admin');
+    localStorage.setItem('authEmail', 'admin@demo.local');
+    window.location.hash = 'admin/dashboard';
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem('users') || '[]');
+  const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+  if (!user) {
+    alert('Username atau password tidak valid.');
+    return;
+  }
+
+  localStorage.setItem('authRole', 'user');
+  localStorage.setItem('authUser', user.username);
+  localStorage.setItem('authEmail', user.email);
+
+  document.querySelector('.wrapper').style.transform = 'scale(0.95)';
+  document.querySelector('.wrapper').style.opacity = '0.5';
+
+  setTimeout(() => {
+    window.location.hash = 'user/dashboard';
+  }, 300);
+}
+</script>
+
+</body>
+</html>

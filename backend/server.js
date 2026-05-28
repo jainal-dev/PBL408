@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000; // Change to a different port
 
 // Middleware
 app.use(express.json());
@@ -25,6 +25,11 @@ app.get('/api/health', (req, res) => {
 
 app.get('/api/iot/devices', (req, res) => {
   res.json({ devices: [] });
+});
+
+// Define a route for the root path
+app.get('/', (req, res) => {
+    res.send('Welcome to the backend server!');
 });
 
 // Start Server
