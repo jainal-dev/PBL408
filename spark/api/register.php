@@ -1,6 +1,8 @@
 <?php
 /* API REGISTER */
 
+session_start();
+
 header("Content-Type: application/json");
 
 require_once __DIR__ . "/../db.php";
@@ -117,16 +119,21 @@ try {
 
   $userId = $pdo->lastInsertId();
 
+  $newUser = [
+    "user_id" => (int) $userId,
+    "nama"    => $nama,
+    "email"   => $email,
+    "role"    => "pengguna"
+  ];
+
+  /* Simpan sesi server (langsung login) */
+  $_SESSION["user"] = $newUser;
+
   /* Sukses */
   echo json_encode([
     "success" => true,
     "message" => "Pendaftaran berhasil",
-    "user" => [
-      "user_id" => (int) $userId,
-      "nama"    => $nama,
-      "email"   => $email,
-      "role"    => "pengguna"
-    ]
+    "user" => $newUser
   ]);
 
 } catch (PDOException $e) {

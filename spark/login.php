@@ -1,3 +1,10 @@
+<?php
+  session_start();
+  if (isset($_SESSION['user'])) {
+    header('Location: dashboard.php');
+    exit;
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +14,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/login.css?v=2">
 </head>
 
 <body>
@@ -98,7 +105,9 @@ async function login() {
     wrapper.style.opacity = "0.6";
 
     setTimeout(() => {
-      window.location.href = "dashboard.php";
+      window.location.href = (data.user.role === "admin")
+        ? "../halaman-admin/dashboard.php"
+        : "dashboard.php";
     }, 300);
 
   } catch (err) {

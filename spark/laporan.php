@@ -1,98 +1,184 @@
+<?php require_once __DIR__ . '/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+<title>Laporan Saya</title>
 
-<title>Laporan</title>
+<link rel="stylesheet" href="css/laporan.css?v=8">
 
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-  rel="stylesheet"
->
-
-<link rel="stylesheet" href="css/laporan.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
 <div class="container">
 
-  <div class="card">
+    <div class="header">
 
-    <h3>Buat Laporan</h3>
+        <div>
 
-    <div class="sub">
-      Laporkan kondisi parkir secara real-time
-    </div>
+            <h1>Laporan Saya</h1>
 
-    <!-- AREA -->
-    <div class="group">
+            <p>
+                Riwayat semua laporan yang pernah kamu buat
+            </p>
 
-      <label>
-        Area / Slot Parkir
-      </label>
+        </div>
 
-      <select>
-
-        <option>TA</option>
-        <option>GU</option>
-        <option>Techno</option>
-        <option>RTM</option>
-
-      </select>
+        <button
+            class="btn-buat"
+            onclick="openForm()"
+        >
+            <span class="plus">+</span>
+            Buat Laporan
+        </button>
 
     </div>
 
-    <!-- KONDISI -->
-    <div class="group">
+    <div id="list-laporan">
 
-      <label>
-        Kondisi Parkir
-      </label>
-
-      <select>
-
-        <option>Kosong</option>
-        <option>Terisi</option>
-        <option>Rusak</option>
-
-      </select>
+        <div class="loading">
+            Memuat laporan...
+        </div>
 
     </div>
 
-    <!-- DESKRIPSI -->
-    <div class="group">
+    <!-- NAVBAR -->
+    <div class="navbar">
 
-      <label>
-        Deskripsi (Opsional)
-      </label>
+        <a href="dashboard.php">
+            Beranda
+        </a>
 
-      <textarea
-        placeholder="Contoh: Slot rusak, ada motor parkir sembarangan, dll..."
-      ></textarea>
+        <a href="laporan.php" class="active">
+            Laporan Saya
+        </a>
 
     </div>
-
-    <!-- BUTTON -->
-    <button>
-      Kirim Laporan
-    </button>
-
-    <!-- BACK -->
-    <a href="dashboard.php" class="back">
-      Kembali
-    </a>
-
-  </div>
 
 </div>
+
+<!-- MODAL -->
+
+<div
+    class="modal-overlay"
+    id="modal-overlay"
+    onclick="closeForm()"
+>
+
+    <div
+        class="modal"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="modal-header">
+
+            <h2 id="modal-title">
+                Buat Laporan
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeForm()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="group">
+
+            <label>Area Parkir</label>
+
+            <select
+                id="selArea"
+                onchange="loadSlot()"
+            >
+                <option value="">
+                    Pilih Area
+                </option>
+            </select>
+
+        </div>
+
+        <div class="group">
+
+            <label>Nomor Slot</label>
+
+            <div class="dropdown" id="slotDropdown">
+
+                <button
+                    type="button"
+                    class="dropdown-trigger"
+                    onclick="toggleSlot()"
+                >
+                    <span id="slotLabel" class="placeholder">
+                        Pilih Area Dulu
+                    </span>
+                    <span class="dropdown-arrow">▾</span>
+                </button>
+
+                <div class="dropdown-menu" id="slotMenu"></div>
+
+            </div>
+
+            <input type="hidden" id="selSlot" value="">
+
+        </div>
+
+        <div class="group">
+
+            <label>Kondisi</label>
+
+            <select id="selKondisi">
+
+                <option value="kosong">
+                    Kosong
+                </option>
+
+                <option value="terisi">
+                    Terisi
+                </option>
+
+                <option value="rusak">
+                    Rusak
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="group">
+
+            <label>Deskripsi</label>
+
+            <textarea
+                id="txtDeskripsi"
+                placeholder="Tulis detail laporan..."
+            ></textarea>
+
+        </div>
+
+        <div
+            id="form-error"
+            class="error"
+        ></div>
+
+        <button
+            id="btn-submit"
+            class="submit-btn"
+            onclick="submitLaporan()"
+        >
+            Kirim Laporan
+        </button>
+
+    </div>
+
+</div>
+
+<script src="js/laporan.js?v=3"></script>
 
 </body>
 </html>

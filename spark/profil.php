@@ -1,141 +1,14 @@
+<?php require_once __DIR__ . '/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profil</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
-}
-
-body{
-  min-height:100vh;
-  background:linear-gradient(135deg,#dbeafe,#eff6ff);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-
-/* glow */
-body::before, body::after{
-  content:'';
-  position:absolute;
-  width:260px;
-  height:260px;
-  border-radius:50%;
-  filter:blur(120px);
-}
-body::before{background:#60a5fa;top:-80px;left:-80px;}
-body::after{background:#3b82f6;bottom:-80px;right:-80px;}
-
-.card{
-  position:relative;
-  z-index:1;
-  width:100%;
-  max-width:400px;
-  background:rgba(255,255,255,0.75);
-  backdrop-filter:blur(14px);
-  padding:24px;
-  border-radius:20px;
-  box-shadow:0 15px 40px rgba(59,130,246,0.15);
-}
-
-/* avatar */
-.avatar{
-  width:85px;
-  height:85px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#3b82f6,#2563eb);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  margin:auto;
-  margin-bottom:14px;
-}
-
-/* text */
-.name{
-  text-align:center;
-  font-size:22px;
-  font-weight:700;
-  color:#0f172a;
-}
-
-.email{
-  text-align:center;
-  font-size:13px;
-  color:#64748b;
-  margin-bottom:18px;
-}
-
-/* detail */
-.detail{
-  background:white;
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:12px;
-}
-
-.label{
-  font-size:11px;
-  color:#94a3b8;
-}
-
-.value{
-  font-size:14px;
-  font-weight:500;
-}
-
-/* button */
-button{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:14px;
-  background:linear-gradient(90deg,#3b82f6,#2563eb);
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-  margin-top:12px;
-}
-
-/* logout */
-.logout{
-  background:linear-gradient(90deg,#ef4444,#dc2626);
-}
-
-/* edit */
-.edit{
-  display:none;
-}
-
-input{
-  width:100%;
-  padding:12px;
-  margin-top:6px;
-  border-radius:12px;
-  border:1px solid #e2e8f0;
-}
-
-/* back */
-.back{
-  display:block;
-  text-align:center;
-  margin-top:12px;
-  text-decoration:none;
-  color:#2563eb;
-  font-size:13px;
-}
-</style>
+<link rel="stylesheet" href="css/profil.css?v=1">
 </head>
 
 <body>
@@ -150,13 +23,18 @@ input{
     <div class="email" id="email"></div>
 
     <div class="detail">
-      <div class="label">Username</div>
-      <div class="value" id="usernameText"></div>
+      <div class="label">Nama</div>
+      <div class="value" id="namaText"></div>
     </div>
 
     <div class="detail">
       <div class="label">Email</div>
       <div class="value" id="emailText"></div>
+    </div>
+
+    <div class="detail">
+      <div class="label">Role</div>
+      <div class="value" id="roleText"></div>
     </div>
 
     <button onclick="showEdit()">Edit Profil</button>
@@ -166,69 +44,159 @@ input{
   <!-- EDIT MODE -->
   <div id="edit" class="edit">
 
-    <div class="label">Username</div>
-    <input id="usernameInput">
+    <div class="label">Nama</div>
+    <input id="namaInput">
 
     <div class="label">Email</div>
-    <input id="emailInput">
+    <input id="emailInput" type="email">
 
-    <button onclick="simpan()">Simpan Perubahan</button>
+    <div class="label">Password Baru</div>
+    <input id="passwordInput" type="password" placeholder="••••••">
+    <div class="hint">Kosongkan jika tidak ingin mengubah password</div>
+
+    <div id="msg" class="msg"></div>
+
+    <button id="btnSimpan" onclick="simpan()">Simpan Perubahan</button>
+    <a class="back" onclick="batal()">Batal</a>
   </div>
 
-  <a href="dashboard.html" class="back">Kembali</a>
+  <a href="dashboard.php" class="back">Kembali</a>
 
 </div>
 
 <script>
 
-/* INIT USER */
-function initUser(){
-  if(!localStorage.getItem("user")){
-    localStorage.setItem("user", JSON.stringify({
-      username:"Budi",
-      email:"budi@gmail.com"
-    }));
+/* AUTH */
+let user = null;
+try {
+  user = JSON.parse(localStorage.getItem("user"));
+} catch (e) {
+  user = null;
+}
+
+if (!user || !user.user_id) {
+  window.location.href = "login.php";
+}
+
+/* TAMPILKAN DATA */
+function tampilkan() {
+  document.getElementById("name").innerText  = user.nama || "-";
+  document.getElementById("email").innerText = user.email || "-";
+
+  document.getElementById("namaText").innerText  = user.nama || "-";
+  document.getElementById("emailText").innerText = user.email || "-";
+  document.getElementById("roleText").innerText  = user.role || "-";
+
+  document.getElementById("avatar").innerText =
+    (user.nama || "U").charAt(0).toUpperCase();
+
+  document.getElementById("namaInput").value  = user.nama || "";
+  document.getElementById("emailInput").value = user.email || "";
+}
+
+/* AMBIL DATA TERBARU DARI DB */
+async function muatProfil() {
+  try {
+    const res = await fetch("api/profil_get.php?user_id=" + user.user_id);
+    const json = await res.json();
+
+    if (json.success) {
+      user = json.user;
+      localStorage.setItem("user", JSON.stringify(user));
+      tampilkan();
+    }
+  } catch (e) {
+    console.error(e);
+    // tetap pakai data localStorage kalau server tidak terjangkau
+  }
+}
+
+/* MODE EDIT */
+function showEdit() {
+  document.getElementById("passwordInput").value = "";
+  document.getElementById("msg").innerText = "";
+  document.getElementById("msg").className = "msg";
+
+  document.getElementById("view").style.display = "none";
+  document.getElementById("edit").style.display = "block";
+}
+
+function batal() {
+  document.getElementById("edit").style.display = "none";
+  document.getElementById("view").style.display = "block";
+}
+
+/* SIMPAN KE DB */
+async function simpan() {
+  const nama     = document.getElementById("namaInput").value.trim();
+  const email    = document.getElementById("emailInput").value.trim();
+  const password = document.getElementById("passwordInput").value;
+
+  const msg = document.getElementById("msg");
+  const btn = document.getElementById("btnSimpan");
+
+  msg.className = "msg";
+
+  if (!nama || !email) {
+    msg.className = "msg error";
+    msg.innerText = "Nama dan email wajib diisi";
+    return;
   }
 
-  let user = JSON.parse(localStorage.getItem("user"));
+  btn.disabled = true;
 
-  document.getElementById("name").innerText = user.username;
-  document.getElementById("email").innerText = user.email;
-  document.getElementById("usernameText").innerText = user.username;
-  document.getElementById("emailText").innerText = user.email;
+  try {
+    const res = await fetch("api/profil_update.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: user.user_id,
+        nama: nama,
+        email: email,
+        password: password
+      })
+    });
 
-  document.getElementById("avatar").innerText = user.username.charAt(0).toUpperCase();
+    const json = await res.json();
 
-  document.getElementById("usernameInput").value = user.username;
-  document.getElementById("emailInput").value = user.email;
-}
+    if (!json.success) {
+      msg.className = "msg error";
+      msg.innerText = json.message || "Gagal menyimpan";
+      btn.disabled = false;
+      return;
+    }
 
-/* EDIT */
-function showEdit(){
-  document.getElementById("view").style.display="none";
-  document.getElementById("edit").style.display="block";
-}
+    /* simpan data terbaru */
+    user = json.user;
+    localStorage.setItem("user", JSON.stringify(user));
 
-/* SIMPAN */
-function simpan(){
-  let username = document.getElementById("usernameInput").value;
-  let email = document.getElementById("emailInput").value;
+    tampilkan();
 
-  localStorage.setItem("user", JSON.stringify({username,email}));
+    btn.disabled = false;
+    batal();
 
-  initUser();
-
-  document.getElementById("edit").style.display="none";
-  document.getElementById("view").style.display="block";
+  } catch (e) {
+    console.error(e);
+    msg.className = "msg error";
+    msg.innerText = "Tidak dapat terhubung ke server";
+    btn.disabled = false;
+  }
 }
 
 /* LOGOUT */
-function logout(){
+async function logout() {
+  try {
+    await fetch("api/logout.php");
+  } catch (e) {
+    /* abaikan; tetap lanjut keluar */
+  }
   localStorage.removeItem("user");
-  window.location.href = "login.html";
+  window.location.href = "login.php";
 }
 
-initUser();
+/* INIT */
+tampilkan();   // langsung dari localStorage (tanpa kedip)
+muatProfil();  // lalu segarkan dari DB
 
 </script>
 

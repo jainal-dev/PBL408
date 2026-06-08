@@ -1,6 +1,8 @@
 <?php
 /* API LOGIN */
 
+session_start();
+
 header("Content-Type: application/json");
 
 require_once __DIR__ . "/../db.php";
@@ -72,6 +74,9 @@ try {
 
   /* Jangan ikutkan password di response */
   unset($user["password"]);
+
+  /* Simpan sesi server (proteksi akses halaman) */
+  $_SESSION["user"] = $user;
 
   /* Login berhasil */
   echo json_encode([

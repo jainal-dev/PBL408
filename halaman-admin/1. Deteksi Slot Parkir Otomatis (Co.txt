@@ -1,0 +1,33 @@
+1. Deteksi Slot Parkir Otomatis (Computer Vision)
+
+Sistem menggunakan kamera yang terhubung dengan mikrokontroler untuk menangkap gambar area parkir secara berkala. Gambar tersebut dikirimkan ke server untuk diproses menggunakan teknologi Computer Vision guna mendeteksi apakah slot parkir dalam kondisi kosong atau terisi. Hasil deteksi kemudian disimpan ke dalam database dan digunakan sebagai informasi utama ketersediaan parkir.
+
+2. Monitoring Ketersediaan Parkir Secara Real-Time
+
+Informasi status parkir yang telah diproses oleh server akan ditampilkan pada aplikasi mobile pengguna. Pengguna dapat melihat kondisi parkir secara real-time tanpa harus datang langsung ke lokasi parkir.
+
+3. Dua Mode Visualisasi Informasi Parkir
+
+Sistem menyediakan dua sumber informasi parkir yang dapat dipilih oleh pengguna, yaitu dari hasil deteksi otomatis sistem Computer Vision dan dari laporan pengguna lain (crowdsourcing). Fitur ini bertujuan untuk meningkatkan transparansi informasi parkir apabila terjadi kesalahan deteksi dari sistem otomatis.
+
+(Nanti aku jelaskan lebih detail di bawah ya)
+
+4. Laporan Kondisi Parkir oleh Pengguna (Crowdsourcing)
+
+Pengguna dapat melaporkan kondisi parkir secara manual melalui aplikasi apabila menemukan perbedaan antara kondisi sebenarnya dengan data yang ditampilkan oleh sistem. Laporan ini akan disimpan dalam sistem sebagai sumber data alternatif.
+
+5. Validasi Laporan Sesama Pengguna
+
+Laporan yang dikirimkan oleh pengguna dapat divalidasi oleh pengguna lain untuk memastikan kebenaran informasi. Sistem akan menggunakan laporan yang telah divalidasi sebagai salah satu sumber informasi parkir.
+
+6. Integrasi Sistem IoT dengan Server
+
+Perangkat kamera dan mikrokontroler akan mengirimkan data gambar ke server melalui jaringan internet. Server kemudian memproses data tersebut dan mengirimkan hasil status parkir ke aplikasi pengguna.
+
+7. Penyimpanan dan Riwayat Data Parkir
+
+Sistem menyimpan data status parkir baik dari hasil deteksi Computer Vision maupun laporan pengguna ke dalam database sebagai riwayat data yang dapat digunakan untuk monitoring dan analisis oleh admin.
+
+8. FAQ dan Panduan Penggunaan Aplikasi
+
+Sistem menyediakan halaman FAQ atau panduan penggunaan aplikasi untuk membantu pengguna memahami cara menggunakan fitur monitoring parkir, laporan parkir, serta validasi laporan.

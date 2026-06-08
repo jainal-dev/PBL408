@@ -5,6 +5,10 @@
   font-family: 'Inter', sans-serif;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   min-height: 100dvh;
   display: flex;
